@@ -1,0 +1,27 @@
+<%- include header.ejs %>
+<div id="logErrorWindow">
+   <div>
+            
+                <table>
+                    <tr>
+                        
+                        <td><span style="text-align: center;">Vous avez spécifié un identifiant ou un mot de passe incorrect !</span></td>
+                    </tr>
+                    
+					 <tr>
+                        <td style="text-align: center;">
+						<a href="<%= thisurl %>"><input class="jqButton" style ="margin-top:10px; float: right;" type="button" value="Retour" id="validButton" /></a></td>
+                    </tr>
+				</table>
+			
+	</div>
+</div>
+<script type="text/javascript">
+$(document).ready(function() {thisurl = window.location.href;
+$("#logErrorWindow").dialog({autoOpen: true,title : "Erreur connexion !",width : 250, height : 120});
+$('input[type=button]').myCustomButton({height : "23px"});
+
+});
+</script>
+</body>
+</html>
