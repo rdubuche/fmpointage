@@ -1,0 +1,28 @@
+
+ <div id="changelogwindow">
+        <div>
+            <form id="changelogForm" method="POST" action="/changelog/">
+                <table class="register-table">
+                    <tr>
+                        <td>Identification:</td>
+                        <td><div class="Validator"><input type="text" name="newuserInput" id="newuserInput" class="text-input"/></div></td>
+                    </tr>
+                    <tr>
+                        <td>Mot de passe:</td>
+                        <td><input type="password" name="newpasswordInput" id="newpasswordInput" class="text-input" style="margin-top:10px" /></td>
+                    </tr>
+					 <tr>
+                        <td colspan="2" style="text-align: center;">
+						<div class="Validator">
+						<input type="hidden" class="hiddenurl" name="hiddenurl" />						
+						<input class="jqButton" style ="margin-top:10px; float: right;" type="button" value="Valider" id="changelogButton" /></div></td>
+                    </tr>
+				</table>
+			</form>	
+	</div>
+</div>	
+<script>$(function(){
+thisurl = window.location.href;
+thisLenght = thisurl.length;
+$('.hiddenurl').val(thisurl.substring(thisurl.indexOf("/",10),thisLenght ));
+});</script>
