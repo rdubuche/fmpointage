@@ -1,0 +1,69 @@
+<div id='tabs' style="width : 1500px; height : 650px;margin-top : 50px; overflow : scroll;">
+  <ul style="width : 1390px">
+    <li><a href="#tabs-3">Mes feuilles de pointage</a></li>
+    <li><a href="#tabs-1">Edition pointage hebdomadaire</a></li>
+    <li><a href="#tabs-2">Contrôle</a></li>
+  </ul>
+  <div id="tabs-3">
+  <input type="hidden" id="vcsHiddenCookie" />
+  <%- include('persoGrid'); %>
+  </div>
+  <div id="tabs-1" style="width : 1390px">
+  <%- include('editForm'); %>
+    </div>
+  <div id="tabs-2">
+  <%- include('controlGrid'); %>
+  </div>
+</div>
+
+  <script>
+  $(function() {
+  
+function formatInputs() {
+$('.text-input').myCustomInput({width : 200});
+$('.text-input-little').myCustomInput({width : 70});
+$('.text-input-tiny').myCustomInput({width : 40,margin : 0});
+$('.text-input-title').myCustomInput({width : 300});
+$('textarea').myCustomInput({width : 630, height : 84});
+$('input[type=button]').myCustomButton({height : "21px"});
+$("#connectWindow").dialog({autoOpen: false});
+$("#changelogwindow").dialog({autoOpen: false});
+$('#changelogin').css('cursor' , 'pointer');$('img[alt=cameraImg]').css('cursor' , 'pointer');
+$('#connectedPeople tr').css({'cursor' : 'pointer','min-width' : '100%','display': 'block','line-height' : '30px','padding-left' : '10px'});
+$('body').on('mouseover','#connectedPeople tr',function(){$(this).css({'border-top' : 'solid','border-bottom' : 'solid','border-collapse': 'collapse','border-width' : '1px','border-color' : 'rgb(179,179,179)','background-color' : 'rgb(225,225,225)'});});
+$('body').on('mouseout','#connectedPeople tr',function(){$(this).css({'border' : 'none','background' : 'transparent'});});
+$('#leftMenu li').css({'text-decoration' : 'none','list-style' : 'none'});
+$('#leftMenu li a').css({'text-decoration' : 'none','list-style' : 'none','cursor' : 'pointer','display': 'block','line-height' : '30px','font-size' : '15px'});
+$('#leftMenu li a').css({'color' : 'rgb(175,0,124)','background-color' : 'rgb(229,229,229)','padding' :'5px'});
+$('body').on('mouseover','#leftMenu li a',function(){$(this).css({'background-color' : 'rgb(175,0,124)','color' : 'rgb(255,255,255)'});});
+$('body').on('mouseout','#leftMenu li a',function(){$(this).css({'color' : 'rgb(175,0,124)','background-color' : 'rgb(229,229,229)'});});
+$('a').css({'text-decoration' : 'none','color' : 'rgb(175,0,124)'});
+$('#leftMenu a').prop('target' , 'blanck');
+$('#leftMenu li a').on('click',function(){$(this).css('tabindex','-1');});
+$( ".datepicker" ).datepicker($.datepicker.regional[ "fr" ]);
+$( ".datepicker" ).myCustomInput({width : 70,margin : 0});
+$('#uploadButtonDiv').myCustomButton({height : "30px"});
+}
+
+if( $.cookie('infobuCookie') !== undefined) {  
+$( "#tabs" ).css("visibility" , "visible");
+    $( "#tabs" ).tabs();
+	}
+	else
+	{
+$( "#tabs" ).css("visibility" , "hidden");	
+	}
+	
+$('body').on('click','.modphc',function() {
+thisId =$(this).prev('input[type=hidden]').val();
+thiscontrol = $(this).next('input[type=hidden]').val();
+vcsHiddenCookie = $('#vcsHiddenCookie').val();
+socket.emit('updatephc',{"thisId" : thisId , "control" : thiscontrol , "vcsHiddenCookie" : vcsHiddenCookie});
+});
+  socket.on('phcFormUpdate',function(phcFormUpdate){$('body').append(phcFormUpdate); formatInputs();
+  $('.vertical').css('top','210px');
+  });
+  
+  });
+  
+  </script>
