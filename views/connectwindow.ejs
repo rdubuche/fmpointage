@@ -1,0 +1,28 @@
+
+ <div id="connectWindow">
+        <div>
+            <form id="logForm" method="POST" action="/user/">
+                <table class="register-table">
+                    <tr>
+                        <td>Identification:</td>
+                        <td><input type="text" name="userInput" id="userInput" class="text-input"/></td>
+                    </tr>
+                    <tr>
+                        <td>Mot de passe:</td>
+                        <td><input type="password" name="passwordInput" id="passwordInput" class="text-input" style="margin-top:10px" /></td>
+                    </tr>
+					 <tr>
+                        <td colspan="2" style="text-align: center;">
+						<input type="hidden" class="hiddenurl" name="hiddenurl" />
+						<input class="jqButton" style ="margin-top:10px; float: right;" type="button" value="Valider" id="sendButton" /></td>
+                    </tr>
+				</table>
+			</form>	
+	</div>
+</div>	
+	
+<script>$(function(){
+thisurl = window.location.href;
+thisLenght = thisurl.length;
+$('.hiddenurl').val(thisurl.substring(thisurl.indexOf("/",10),thisLenght ));
+});</script>
