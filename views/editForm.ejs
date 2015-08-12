@@ -1,0 +1,207 @@
+<div style="overflow : hidden">
+<form action="/savephc/" method="POST" id="savephc">
+<table class="borderedTable" id="phcTable">
+<tbody>
+<tr>
+<th width="100">Client</th>
+<% for (i = 1 ; i < 6 ; i++) { %>
+<td alt="customer"><input type="text" class="text-input-little" name="cli<%= i %>" /></td>
+<% }
+var frenchDays = ["","Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi","Dimanche"];
+var rs = 3;
+ %>
+<th rowspan="<%= rs %>"><div class="v-container"><div class="vertical"><nobr>Congé détente</nobr></div></div></th>
+<th rowspan="<%= rs %>"><div class="v-container"><div class="vertical">Férié</div></th>
+<th rowspan="<%= rs %>"><div class="v-container"><div class="vertical"><nobr>Démodulation / RTT</nobr></div></div></th>
+<th rowspan="<%= rs %>"><div class="v-container"><div class="vertical"><nobr>Jour Initiative Salarié </nobr></div></div></th>
+<th rowspan="<%= rs %>"><div class="v-container"><div class="vertical">CP</div></div></th>
+<th rowspan="<%= rs %>"><div class="v-container"><div class="vertical"><nobr>Maladie / AT</nobr></div></div></th>
+<th rowspan="<%= rs %>" title="PDEP - Petit déplacement France"><div class="v-container"><div class="vertical"><nobr>PDEP</nobr></div></div></th>
+<th rowspan="<%= rs %>" title="PGEP - Grand déplacement"><div class="v-container"><div class="vertical">GDEP</div></th>
+<th rowspan="<%= rs %>" title="PARIS (75 - 77 - -78 - 91 - 92 - 93 - 94 - 95)"><div class="v-container"><div class="vertical"><nobr>PARIS</nobr></div></div></th>
+<th rowspan="<%= rs %>"><div class="v-container"><div class="vertical"><nobr>ETRANGER </nobr></div></div></th>
+<th rowspan="<%= rs %>" title="P.PDEP - Prime Petit déplacement France (exclus fonction intervention)"><div class="v-container"><div class="vertical">P.PDEP</div></div></th>
+<th rowspan="<%= rs %>" title="P.GDEP - Prime Grand déplacement (exclus fonction intervention)"><div class="v-container"><div class="vertical"><nobr>P.GDEP</nobr></div></div></th>
+<th rowspan="<%= rs %>" title="P.D.P. - Prime Départ Précipité < 24 heures (exclus fonction intervention)"><div class="v-container"><div class="vertical"><nobr>P.D.P.</nobr></div></div></th>
+<th rowspan="<%= rs %>"><div class="v-container"><div class="vertical"><nobr>Kilomètres</nobr></div></div></th>
+<th rowspan="<%= rs %>"><div class="v-container"><div class="vertical"><nobr>Non respect du délai prévenance</nobr></div></div></th>
+<th rowspan="<%= rs %>"><div class="v-container"><div class="vertical"><nobr>Astreinte Nuit</nobr></div></div></th>
+<th rowspan="<%= rs %>"><div class="v-container"><div class="vertical"><nobr>Astreinte Week-end</nobr></div></div></th>
+<th rowspan="<%= rs %>"><div class="v-container"><div class="vertical"><nobr>Astreinte Jour Férié</nobr></div></div></th>
+</tr>
+<tr>
+
+<th>N° Affaire</th>
+<% for (i = 1 ; i < 6 ; i++) { %>
+<td alt="project"><input class="text-input-little" name="aff<%= i %>" /></td>
+<% } %>
+</tr>
+<tr>
+<th height="95">Date</th>
+<% for (i = 1 ; i < 6 ; i++) { %>
+<th alt="pjour">% / Jour</th>
+<% } %>
+
+</tr>
+<% for (k = 1 ; k < 8 ; k++) { %>
+<tr>
+<th alt="datepicker"><%= frenchDays[k] %><input type="text" class="datepicker" name="dat<%= k %>" /></th>
+<% for (i = 1 ; i < 6 ; i++) { %>
+<td alt="htv<%= k %>">
+<span style="text-align : center; color : #AF007C">Travail</span><input class="text-input-little"  name="ht<%= i %><%= k %>" />
+<span style="text-align : center; color : #AF007C">Voyage</span><input class="text-input-little"  name="hv<%= i %><%= k %>" /></td>
+<% } %>
+<td><input style="margin-left : 10px;" type="checkbox" name="cd<%= k %>" value="1" /></td>
+<td><input style="margin-left : 10px;" type="checkbox" name="ferie<%= k %>"  value="1"/></td>
+<td><select class="text-input-tiny" name="rtt<%= k %>" ><option value="0">0</option><option value="0.5">0.5</option><option value="1">1</option> </select></td>
+<td><select class="text-input-tiny" name="jis<%= k %>" ><option value="0">0</option><option value="0.5">0.5</option><option value="1">1</option> </select></td>
+<td><select class="text-input-tiny" name="cp<%= k %>" ><option value="0">0</option><option value="0.5">0.5</option><option value="1">1</option> </select></td>
+<td><select class="text-input-tiny"  id="ma<%= k %>" name="ma<%= k %>" ><option value="0">0</option><option value="0.5">0.5</option><option value="1">1</option> </select></td>
+<td title="PDEP - Petit déplacement France"><input style="margin-left : 10px;" type="checkbox"  name="pdep<%= k %>" value="1" /></td>
+<td title="PGEP - Grand déplacement"><input style="margin-left : 10px;" type="checkbox"  name="gdep<%= k %>" value="1" /></td>
+<td title="PARIS (75 - 77 - -78 - 91 - 92 - 93 - 94 - 95)"><input style="margin-left : 10px;" type="checkbox"  name="paris<%= k %>" value="1" /></td>
+<td><input style="margin-left : 10px;" type="checkbox"  name="etranger<%= k %>" value="1" /></td>
+<td title="P.PDEP - Prime Petit déplacement France (exclus fonction intervention)"><input style="margin-left : 10px;" type="checkbox"  name="ppdep<%= k %>" value="1" /></td>
+<td title="P.GDEP - Prime Grand déplacement (exclus fonction intervention)"><input style="margin-left : 10px;" type="checkbox"  name="pgdep<%= k %>" value="1" /></td>
+<td title="P.D.P. - Prime Départ Précipité < 24 heures (exclus fonction intervention)"><input style="margin-left : 10px;" type="checkbox"  name="pdp<%= k %>" value="1" /></td>
+<td><input style="margin-left : 10px;" type="text" class="text-input-tiny"  name="kms<%= k %>"  /></td>
+<td title="Prime de non respect du délai de prévenance : (exclus fonction intervention)"><input style="margin-left : 10px;" type="checkbox"  name="nrdp<%= k %>" value="1" /></td>
+<td><input style="margin-left : 10px;" type="checkbox"  name="astnuit<%= k %>" value="1" /></td>
+<td><input style="margin-left : 10px;" type="checkbox"  name="astwe<%= k %>" value="1" /></td>
+<td><input style="margin-left : 10px;" type="checkbox"  name="astfe<%= k %>" value="1" /></td>
+</tr>
+<% } %>
+<tr>
+<th>Observations:</th><td colspan="24"><textarea name="comments"></textarea></td>
+</tr>
+</tbody>
+<tfoot><tr>
+<td colspan="23" style="background-color : rgb(229,229,229);">
+<input type="hidden" id="hiddenphcaction" name="hiddenphcaction" />
+<input type="button" value="Envoyer" style="float : left; margin-right : 10px" id="sendphcButton" />
+<input type="button" value="Enregistrer" style="float : left; margin-right : 10px" id="savephcButton" />
+</td>
+<td style="background-color : rgb(229,229,229);" align="center"><img src="../images/css/add.png" style="cursor : pointer" id="addColumn" title="Ajouter une colonne" /></td>
+</tr></tfoot>
+</table>
+</form>
+</div>
+<script type="text/javascript">
+
+function addZero(i) {
+    if (i < 10) {
+        i = "0" + i;
+    }
+    return i;
+}
+
+$(document).ready(function() {
+
+function formatInputs() {
+$('.text-input').myCustomInput({width : 200});
+$('.text-input-little').myCustomInput({width : 70});
+$('.text-input-tiny').myCustomInput({width : 40,margin : 0});
+$('.text-input-title').myCustomInput({width : 300});
+$('textarea').myCustomInput({width : 630, height : 84});
+$('input[type=button]').myCustomButton({height : "21px"});
+$("#connectWindow").dialog({autoOpen: false});
+$("#changelogwindow").dialog({autoOpen: false});
+$('#changelogin').css('cursor' , 'pointer');$('img[alt=cameraImg]').css('cursor' , 'pointer');
+$('a').css({'text-decoration' : 'none','color' : 'rgb(175,0,124)'});
+$( ".datepicker" ).datepicker($.datepicker.regional[ "fr" ]);
+$( ".datepicker" ).myCustomInput({width : 70,margin : 0});
+
+}
+/*
+$('td[alt=customer]').on('change',function(){
+	
+	thisValue = $(this).children('input').val(); 
+	thisIndex = $(this).index();
+	// thisIndex++;
+	for (i = thisIndex ; i < 6 ; i++) {
+	$("#phcTable").find('td[alt=customer]').eq(i).children('input').val(thisValue);
+	}
+	}) ;
+
+$('td[alt=project]').on('change',function(){
+	
+	thisValue = $(this).children('input').val(); 
+	thisIndex = $(this).index();
+	// thisIndex++;
+	for (i = thisIndex ; i < 6 ; i++) {
+	$("#phcTable").find('td[alt=project]').eq(i).children('input').val(thisValue);
+	}
+	}) ;
+*/
+$('th[alt=datepicker]').on('change',function(){
+	thisIndex = $(this).parent().index();
+	thisDate = $(this).children('input:first').datepicker( "getDate" );
+	thisIndex++;
+	for (i = thisIndex ; i < 10 ; i++) {
+	thisDate.setDate(thisDate.getDate()+1);
+	thisDate = new Date(thisDate);
+	$("#phcTable").find("tr").eq(i).children().children().datepicker( "setDate" ,thisDate);
+	}
+	}) ;
+
+	$('#phcTable').on('click','#savephcButton',function() {
+	$('#hiddenphcaction').val('save');
+	$('#savephc').submit()});
+	
+	$('#phcTable').on('click','#sendphcButton',function() {
+	$('#hiddenphcaction').val('send');
+	$('#savephc').submit()});
+
+$('#addColumn').on('click',function() {
+
+// colspan
+
+var csp = $("#phcTable").find('tfoot td:first').prop('colspan');
+csptd = $("#phcTable").find('tbody td:last').prop('colspan');
+csp++;
+csptd++;
+
+// largeur de la fenetre
+
+var tabsWidth = $('#tabs').css('width');
+tabsWidth = parseInt(tabsWidth) + parseInt(100);
+$('#tabs').css('width',tabsWidth);
+var tabWidth = $('#tabs-1').css('width');
+tabWidth = parseInt(tabWidth) + parseInt(100);
+$('#tabs-1').css('width',tabWidth + "px");
+
+// dernier index de colonne pour i
+
+lastIndex = $("#phcTable").find('td[alt=customer]:last').index();
+i = parseInt(lastIndex) + parseInt(1);
+
+// ajout de colonne
+
+newcol = '<td alt="customer"><input type="text" class="text-input-little" name="cli'+i+'" /></td>';
+$("#phcTable").find('td[alt=customer]:last').after(newcol);
+newcol = '<td alt="project"><input type="text" class="text-input-little" name="aff'+i+'" /></td>';
+$("#phcTable").find('td[alt=project]:last').after(newcol);
+newcol = '<th alt="pjour">% / Jour</th>';
+$("#phcTable").find('th[alt=pjour]:last').after(newcol);
+
+for (k = 1; k < 8 ; k++) {
+newcol = '<td alt="htv'+k+'">' + 
+'<span style="text-align : center; color : #AF007C">Travail</span><input class="text-input-little"  name="ht'+i+k+'" />' + 
+'<span style="text-align : center; color : #AF007C">Voyage</span><input class="text-input-little"  name="hv'+i+k+'" /></td>';
+$("#phcTable").find('td[alt="htv'+k+'"]:last').after(newcol);
+}
+
+// colspan
+
+$("#phcTable").find('tfoot td:first').prop('colspan',csp);
+$("#phcTable").find('tbody td:last').prop('colspan',csptd);
+formatInputs();
+
+socket.emit('newcolumn',i);
+});	
+/*################################################################################################################################################
+###################################     Fin $(document).ready                       ###########################################################
+################################################################################################################################################*/
+    
+});
+</script>
