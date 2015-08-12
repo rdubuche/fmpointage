@@ -1,0 +1,71 @@
+<% 
+Date.prototype.getWeek = function() {
+var onejan = new Date(this.getFullYear(),0,1);
+return Math.ceil((((this - onejan) / 86400000) + onejan.getDay()+1)/7);
+} 
+
+function getMat(c) {
+cMat = c.substring(0,c.indexOf("-",0));
+return cMat;
+}
+var cookieMat = "";
+if (mycookie != undefined) {cookieMat = getMat(mycookie);}
+%>
+<div style="overflow : hidden">
+<table class="borderedTable" id="phcPersoTable">
+<thead>
+<tr>
+<th colspan="5">Feuilles de pointage personnelles</th>
+<th colspan="2">Feuilles de pointage transmises</th>
+</tr>
+<tr>
+<th>Année</th>
+<th>Mois</th>
+<th>Semaine</th>
+<th>Impression</th>
+<th>Modification</th>
+<th>Validation</th>
+<th>Impression</th>
+</tr>
+</thead>
+<tbody>
+<% result.forEach(function(row){ 
+rowMat = getMat(row.phcName);
+if (cookieMat == rowMat) {
+
+		pleinMonth = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
+		var thisYear;
+		var thismonth;
+		var thisweek;
+	
+if (row.dat1 !== "0000-00-00") {thisYear = row.dat1.getFullYear();thismonth = pleinMonth[row.dat1.getMonth()];thisweek = row.dat1.getWeek();}
+else if (row.dat2 !== "0000-00-00") {thisYear = row.dat2.getFullYear();thismonth = pleinMonth[row.dat2.getMonth()];thisweek = row.dat2.getWeek();}
+else if (row.dat3 !== "0000-00-00") {thisYear = row.dat3.getFullYear();thismonth = pleinMonth[row.dat3.getMonth()];thisweek = row.dat3.getWeek();}
+else if (row.dat4 !== "0000-00-00") {thisYear = row.dat4.getFullYear();thismonth = pleinMonth[row.dat4.getMonth()];thisweek = row.dat4.getWeek();}
+else if (row.dat5 !== "0000-00-00") {thisYear = row.dat5.getFullYear();thismonth = pleinMonth[row.dat5.getMonth()];thisweek = row.dat5.getWeek();}
+else if (row.dat6 !== "0000-00-00") {thisYear = row.dat6.getFullYear();thismonth = pleinMonth[row.dat6.getMonth()];thisweek = row.dat6.getWeek();}
+else if (row.dat7 !== "0000-00-00") {thisYear = row.dat7.getFullYear();thismonth = pleinMonth[row.dat7.getMonth()];thisweek = row.dat7.getWeek();}
+else  {thisYear = row.phcDate.getFullYear();thismonth = pleinMonth[row.phcDate.getMonth()];thisweek = row.phcDate.getWeek();}
+%>
+
+<tr>
+<td align="center"><%= thisYear %></td>
+<td align="center"><%= thismonth %></td>
+<td align="center"><%= thisweek %></td>
+<td align="center"><a href="/print/<%= row.id %>/owner/"><img src="../images/css/print.png" style="cursor : pointer;  height : 20px" /></a></td>
+<td align="center"><input type="hidden" value="<%= row.id %>" /><img src="../images/css/mod.png" style="cursor : pointer;  height : 20px" class="modphc" /><input type="hidden" value="owner" /></td>
+<td align="center"><input  type="checkbox" class="vcs name="vcs" <% if (row.vcs == 1) { %> checked <% } %> disabled=disabled/></td>
+<td align="center">
+<% if (row.hiddenphcaction == "send") { %>
+<a href="/print/<%= row.id %>/control/"><img src="../images/css/print.png" style="cursor : pointer;  height : 20px" /></a>
+<% } %>
+</td>
+</tr>
+
+
+<% 
+}
+}); %>
+</tbody>
+</table>
+</div>
