@@ -1,0 +1,153 @@
+<!doctype html>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>Intranet BU d'Albert</title>
+
+
+		</head>
+<body>	
+
+		<link rel="shortcut icon" type="../image/x-icon" href="images/css/logofives.ico" />
+		<link rel="stylesheet" href="../styles/styles.css" />
+		<link rel="stylesheet" href="../libs/jquery-ui-1.11.4/jquery-ui.css" />
+
+		<script type="text/javascript" src="../libs/jQuery.js"></script>
+		<script type="text/javascript" src="../libs/jquery-ui-1.11.4/jquery-ui.min.js"></script>
+		<script src="../libs/jquery-ui-1.11.4/datepicker-fr.js"></script>
+		<script type="text/javascript" src="../libs/jquery.cookie.js"></script>
+		<script type="text/javascript" src="../libs/vendor/jquery.ui.widget.js"></script>
+		<script type="text/javascript" src="../libs/jquery.iframe-transport.js"></script>
+		<script type="text/javascript" src="../libs/jquery.fileupload.js"></script>
+		<script type="text/javascript" src="../libs/util.js"></script>
+		<script type="text/javascript" src="../scripts/my.custom.plugins.js"></script>
+		<script type="text/javascript" src="../scripts/groups.js"></script>
+		<script type="text/javascript"  src="../socket.io/socket.io.js"></script>
+		
+<div><a href="/pointage/"><img src="../images/css/logo.png" class="logo"></a></div>
+<div style=" margin : 0px; height : 150px;border-bottom : solid; border-width : 1px;border-color : rgb(229,229,229); width : 99.9%;" id="headContainer">
+ 
+<img src="../images/css/ultimate.jpg"  style="float : left; margin-left : 350px; height : 150px"/>
+
+<span style="float : left; color:rgb(175,0,124); font-size : 24px; padding-top : 80px;margin-left : 50px ; font-weight : bold;"> 
+Intranet Fives Machining<br/>Business Unit Forest-liné Albert</span>
+
+<div id="controlsession"><%- include('sessionContent') %></div>
+
+</div>
+
+
+<script>var socket = io.connect('http://localhost:8080');</script>
+<script type="text/javascript">
+
+
+
+function setMajToAllWords(toFirstWord, texte){
+		var newText = (toFirstWord == true) ? texte.charAt(0).toUpperCase() : texte.charAt(0);
+		for (var i=0 ; i<texte.length-1 ; i++){
+			if (texte.charAt(i).match(/\s/) && texte.charAt(i+1).match(/[a-z]/)){
+				newText += texte.charAt(i+1).toUpperCase();
+			} else {
+				newText += texte.charAt(i+1);
+			}
+		}
+		return newText;
+}
+
+function getName(c) {
+
+cLenght = c.lastIndexOf("-");
+cName = c.substring(c.indexOf("-",0)+1,cLenght);
+cName = cName.toLowerCase();
+cName = setMajToAllWords(true,cName);
+return cName;
+}
+
+
+function getMat(c) {
+cMat = c.substring(0,c.indexOf("-",0));
+return cMat;
+}
+
+$(document).ready(function() {
+
+function formatInputs() {
+$('.text-input').myCustomInput({width : 200});
+$('.text-input-little').myCustomInput({width : 70});
+$('.text-input-tiny').myCustomInput({width : 40,margin : 0});
+$('.text-input-title').myCustomInput({width : 300});
+$('textarea').myCustomInput({width : 630, height : 84});
+$('input[type=button]').myCustomButton({height : "21px"});
+$("#connectWindow").dialog({autoOpen: false});
+$("#changelogwindow").dialog({autoOpen: false});
+$('#changelogin').css('cursor' , 'pointer');$('img[alt=cameraImg]').css('cursor' , 'pointer');
+$('a').css({'text-decoration' : 'none','color' : 'rgb(175,0,124)'});
+$( ".datepicker" ).datepicker($.datepicker.regional[ "fr" ]);
+$( ".datepicker" ).myCustomInput({width : 70,margin : 0});
+
+}
+formatInputs();
+
+function manageMyCookie() {
+if( $.cookie('infobuCookie') !== undefined) {  
+
+cookieVal = $.cookie('infobuCookie');
+logName = getName(cookieVal);
+logMat = getMat(cookieVal);
+		if ($.inArray(logMat,infochecker) !== -1) {
+			$('.footerTable').css({'visibility' : 'visible'});
+			formatInputs();
+			$('.pubCheckBox').css({'visibility' : 'visible'});
+			} 						// ###########   if ($.inArray(logMat,checker)   #######
+			
+		else {
+			$.each($('.borderedTable'),function (){
+				if ($('input[alt=hiddenmat]',this).val() == logMat) {
+					$('.footerTable',this).css({'visibility' : 'visible'});					
+					formatInputs();
+			}
+				else {$('.footerTable',this).css({'display' : 'none'});
+				}
+				});
+			
+			}
+	}
+	else {$('.footerTable').css({'display' : 'none'});
+	}
+}
+
+manageMyCookie();
+/*################################################################################################################################################
+###################################     login                       ###########################################################
+################################################################################################################################################*/
+    
+$('body').on('click','#connectbutton', function() { 
+ 
+$("#connectWindow").dialog({title : "Connexion",width : 350, height : 200});
+$("#connectWindow").dialog('open');
+
+}); // click sur connectButton
+
+$('body').on('click','#sendButton',function() { $('#logForm').submit();});
+
+
+
+  
+/*################################################################################################################################################
+###################################    Change login                       ###########################################################
+################################################################################################################################################*/
+    
+  /*************************************************************************************************************/
+$('body').on('click','#changelogin', function() { 
+ 
+$("#changelogwindow").dialog({title : "Changer vos identifiants",width : 350, height : 220});
+$("#changelogwindow").dialog('open');
+
+}); // click sur changelogin
+$('body').on('click','#changelogButton',function() { $('#changelogForm').submit(); });
+
+/*################################################################################################################################################
+###################################     Fin $(document).ready                       ###########################################################
+################################################################################################################################################*/
+    
+});
+
+</script>
