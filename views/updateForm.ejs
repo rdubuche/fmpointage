@@ -1,0 +1,405 @@
+<%
+var count = Object.keys(result[0]).length;
+count = parseInt(count) - parseInt(145);
+count = count/16;
+count++;
+limit = 1;
+for (i = 1; i < count ; i++) {
+		k = i.toString();
+		aff = 'aff' + k;
+		affaire = "result[0]." + aff;
+		affaire = eval(affaire);
+		if (affaire !== null && affaire !=="") {limit++ ;}
+}
+
+cspi = parseInt(count) + parseInt(18);
+cspfi = parseInt(count) + parseInt(17);
+
+function setMajToAllWords(toFirstWord, texte){
+		var newText = (toFirstWord == true) ? texte.charAt(0).toUpperCase() : texte.charAt(0);
+		for (var i=0 ; i<texte.length-1 ; i++){
+			if (texte.charAt(i).match(/\s/) && texte.charAt(i+1).match(/[a-z]/)){
+				newText += texte.charAt(i+1).toUpperCase();
+			} else {
+				newText += texte.charAt(i+1);
+			}
+		}
+		return newText;
+}
+
+function getName(c) {
+
+cLenght = c.lastIndexOf("-");
+cName = c.substring(c.indexOf("-",0)+1,cLenght);
+cName = cName.toLowerCase();
+cName = setMajToAllWords(true,cName);
+return cName;
+}
+
+function toFrDate(dt) {
+	d = new Date(dt);
+	dYear = d.getFullYear();
+	dMonth = d.getMonth();
+	dMonth++;
+	dMonth = addZero(dMonth);
+	dDay = d.getDate();
+	return addZero(dDay) + '/' + dMonth + '/' + dYear;
+}
+
+function addZero(i) {
+    if (i < 10) {
+        i = "0" + i;
+    }
+    return i;
+}
+
+Date.prototype.getWeek = function() {
+var onejan = new Date(this.getFullYear(),0,1);
+return Math.ceil((((this - onejan) / 86400000) + onejan.getDay()+1)/7);
+} 
+
+if (result[0].dat1 !== "0000-00-00") {thisYear = result[0].dat1.getFullYear();thisweek = result[0].dat1.getWeek();}
+else if (result[0].dat2 !== "0000-00-00") {thisYear = result[0].dat2.getFullYear();thisweek = result[0].dat2.getWeek();}
+else if (result[0].dat3 !== "0000-00-00") {thisYear = result[0].dat3.getFullYear();thisweek = result[0].dat3.getWeek();}
+else if (result[0].dat4 !== "0000-00-00") {thisYear = result[0].dat4.getFullYear();thisweek = result[0].dat4.getWeek();}
+else if (result[0].dat5 !== "0000-00-00") {thisYear = result[0].dat5.getFullYear();thisweek = result[0].dat5.getWeek();}
+else if (result[0].dat6 !== "0000-00-00") {thisYear = result[0].dat6.getFullYear();thisweek = result[0].dat6.getWeek();}
+else if (result[0].dat7 !== "0000-00-00") {thisYear = result[0].dat7.getFullYear();thisweek = result[0].dat7.getWeek();}
+else  {thisYear = result[0].phcDate.getFullYear();thisweek = result[0].phcDate.getWeek();}
+
+
+if (result[0].phcControl == 1) {thisTitle = "Modifer le pointage de " + getName(result[0].phcName)  ;}
+else if (result[0].phcControl == 0) {
+if (result[0].vcs == 0) {
+thisTitle = "Modifer votre pointage de la semaine " + thisweek + " - " + thisYear ;}
+else if (result[0].vcs == 1) {
+thisTitle = "Nouvelle feuille de pointage à partir de la feuille de la semaine " + thisweek + " - " + thisYear ;}
+
+}
+%>
+<div id="updatephcWindow" title="<%= thisTitle %>"><div id="updatephcContent" style="padding : 20px">
+<form action="/updatephc/" method="POST" id="upsavephc">
+<table class="borderedTable" id="upphcTable">
+<tbody>
+<tr>
+<th width="100">Client</th>
+<% for (i = 1 ; i < limit ; i++) {
+		mydata = 'cli' + i;
+		thedata = "result[0]." + mydata;
+		thedata = eval(thedata);
+ %>
+<td alt="customer"><input type="text" class="text-input-little" name="cli<%= i %>" value="<%= thedata %>" /></td>
+<% }
+var frenchDays = ["","Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi","Dimanche"];
+var rs = 3;
+ %>
+<th rowspan="<%= rs %>"><div class="v-container"><div class="vertical"><nobr>Congé détente</nobr></div></div></th>
+<th rowspan="<%= rs %>"><div class="v-container"><div class="vertical">Férié</div></th>
+<th rowspan="<%= rs %>"><div class="v-container"><div class="vertical"><nobr>Démodulation / RTT</nobr></div></div></th>
+<th rowspan="<%= rs %>"><div class="v-container"><div class="vertical"><nobr>Jour Initiative Salarié </nobr></div></div></th>
+<th rowspan="<%= rs %>"><div class="v-container"><div class="vertical">CP</div></div></th>
+<th rowspan="<%= rs %>"><div class="v-container"><div class="vertical"><nobr>Maladie / AT</nobr></div></div></th>
+<th rowspan="<%= rs %>" title="PDEP - Petit déplacement France"><div class="v-container"><div class="vertical"><nobr>PDEP</nobr></div></div></th>
+<th rowspan="<%= rs %>" title="PGEP - Grand déplacement"><div class="v-container"><div class="vertical">GDEP</div></th>
+<th rowspan="<%= rs %>" title="PARIS (75 - 77 - -78 - 91 - 92 - 93 - 94 - 95)"><div class="v-container"><div class="vertical"><nobr>PARIS</nobr></div></div></th>
+<th rowspan="<%= rs %>"><div class="v-container"><div class="vertical"><nobr>ETRANGER </nobr></div></div></th>
+<th rowspan="<%= rs %>" title="P.PDEP - Prime Petit déplacement France (exclus fonction intervention)"><div class="v-container"><div class="vertical">P.PDEP</div></div></th>
+<th rowspan="<%= rs %>" title="P.GDEP - Prime Grand déplacement (exclus fonction intervention)"><div class="v-container"><div class="vertical"><nobr>P.GDEP</nobr></div></div></th>
+<th rowspan="<%= rs %>" title="P.D.P. - Prime Départ Précipité < 24 heures (exclus fonction intervention)"><div class="v-container"><div class="vertical"><nobr>P.D.P.</nobr></div></div></th>
+<th rowspan="<%= rs %>"><div class="v-container"><div class="vertical"><nobr>Kilomètres</nobr></div></div></th>
+<th rowspan="<%= rs %>"><div class="v-container"><div class="vertical"><nobr>Non respect du délai prévenance</nobr></div></div></th>
+<th rowspan="<%= rs %>"><div class="v-container"><div class="vertical"><nobr>Astreinte Nuit</nobr></div></div></th>
+<th rowspan="<%= rs %>"><div class="v-container"><div class="vertical"><nobr>Astreinte Week-end</nobr></div></div></th>
+<th rowspan="<%= rs %>"><div class="v-container"><div class="vertical"><nobr>Astreinte Jour Férié</nobr></div></div></th>
+</tr>
+<tr>
+
+<th>N° Affaire</th>
+<% for (i = 1 ; i < limit ; i++) {
+mydata = 'aff' + i;
+		thedata = "result[0]." + mydata;
+		thedata = eval(thedata);
+		%>
+<td alt="project"><input class="text-input-little" name="aff<%= i %>" value="<%= thedata %>" /></td>
+<% } %>
+</tr>
+<tr>
+<th height="95">Date</th>
+<% for (i = 1 ; i < limit ; i++) { %>
+<th alt="pjour">% / Jour</th>
+<% } %>
+</tr>
+<% for (k = 1 ; k < 8 ; k++) {
+mydata = 'dat' + k;
+		thedata = "result[0]." + mydata;
+		thedata = eval(thedata);
+		thedata = toFrDate(thedata);
+		 %>
+<tr>
+<th alt="datepicker"><%= frenchDays[k] %><input type="text" class="datepicker" name="dat<%= k %>" value="<%= thedata %>" /></th>
+<% for (i = 1 ; i < limit ; i++) {
+
+		mydata = 'ht' + i + k;
+		thedata = "result[0]." + mydata;
+		thedata = eval(thedata); %>
+<td alt="htv<%= k %>">
+<span style="text-align : center; color : #AF007C">Travail</span><input class="text-input-little"  name="ht<%= i %><%= k %>" <% if (thedata > 0) { %> value="<%= thedata %>" <% } %>/>
+<%
+		mydata = 'hv' + i + k;
+		thedata = "result[0]." + mydata;
+		thedata = eval(thedata);
+		%>
+<span style="text-align : center; color : #AF007C">Voyage</span><input class="text-input-little"  name="hv<%= i %><%= k %>"  <% if (thedata > 0) { %> value="<%= thedata %>" <% } %>/></td>
+<% } 
+mydata = 'cd' + k;
+		thedata = "result[0]." + mydata;
+		thedata = eval(thedata);
+%>
+<td><input style="margin-left : 10px;" type="checkbox" name="cd<%= k %>" value="1" <% if (thedata > 0) { %> checked <% } %> /></td>
+<%
+mydata = 'ferie' + k;
+		thedata = "result[0]." + mydata;
+		thedata = eval(thedata);
+%>
+<td><input style="margin-left : 10px;" type="checkbox" name="ferie<%= k %>"  value="1" <% if (thedata > 0) { %> checked <% } %> /></td>
+<%
+mydata = 'rtt' + k;
+		thedata = "result[0]." + mydata;
+		thedata = eval(thedata);
+%>
+<td><select class="text-input-tiny" name="rtt<%= k %>" ><option value="0" <% if (thedata == 0) { %> selected <% } %> >0</option><option value="0.5" <% if (thedata == 0.5) { %> selected <% } %>>0.5</option><option value="1" <% if (thedata == 1) { %> selected <% } %>>1</option> </select></td>
+<%
+mydata = 'jis' + k;
+		thedata = "result[0]." + mydata;
+		thedata = eval(thedata);
+%>
+<td><select class="text-input-tiny" name="jis<%= k %>" ><option value="0" <% if (thedata == 0) { %> selected <% } %> >0</option><option value="0.5" <% if (thedata == 0.5) { %> selected <% } %>>0.5</option><option value="1" <% if (thedata == 1) { %> selected <% } %>>1</option> </select></td>
+<%
+mydata = 'cp' + k;
+		thedata = "result[0]." + mydata;
+		thedata = eval(thedata);
+%>
+<td><select class="text-input-tiny" name="cp<%= k %>" ><option value="0" <% if (thedata == 0) { %> selected <% } %> >0</option><option value="0.5" <% if (thedata == 0.5) { %> selected <% } %>>0.5</option><option value="1" <% if (thedata == 1) { %> selected <% } %>>1</option> </select></td>
+<%
+mydata = 'ma' + k;
+		thedata = "result[0]." + mydata;
+		thedata = eval(thedata);
+%>
+<td><select class="text-input-tiny"  id="ma<%= k %>" name="ma<%= k %>" ><option value="0" <% if (thedata == 0) { %> selected <% } %> >0</option><option value="0.5" <% if (thedata == 0.5) { %> selected <% } %>>0.5</option><option value="1" <% if (thedata == 1) { %> selected <% } %>>1</option> </select></td>
+<%
+mydata = 'pdep' + k;
+		thedata = "result[0]." + mydata;
+		thedata = eval(thedata);
+%>
+<td title="PDEP - Petit déplacement France"><input style="margin-left : 10px;" type="checkbox"  name="pdep<%= k %>" value="1"  <% if (thedata > 0) { %> checked <% } %> /></td>
+<%
+mydata = 'gdep' + k;
+		thedata = "result[0]." + mydata;
+		thedata = eval(thedata);
+%>
+<td title="PGEP - Grand déplacement"><input style="margin-left : 10px;" type="checkbox"  name="gdep<%= k %>" value="1"  <% if (thedata > 0) { %> checked <% } %> /></td>
+<%
+mydata = 'paris' + k;
+		thedata = "result[0]." + mydata;
+		thedata = eval(thedata);
+%>
+<td title="PARIS (75 - 77 - -78 - 91 - 92 - 93 - 94 - 95)"><input style="margin-left : 10px;" type="checkbox"  name="paris<%= k %>" value="1"  <% if (thedata > 0) { %> checked <% } %> /></td>
+<%
+mydata = 'etranger' + k;
+		thedata = "result[0]." + mydata;
+		thedata = eval(thedata);
+%>
+<td><input style="margin-left : 10px;" type="checkbox"  name="etranger<%= k %>" value="1"  <% if (thedata > 0) { %> checked <% } %> /></td>
+<%
+mydata = 'ppdep' + k;
+		thedata = "result[0]." + mydata;
+		thedata = eval(thedata);
+%>
+<td title="P.PDEP - Prime Petit déplacement France (exclus fonction intervention)"><input style="margin-left : 10px;" type="checkbox"  name="ppdep<%= k %>" value="1"  <% if (thedata > 0) { %> checked <% } %> /></td>
+<%
+mydata = 'pgdep' + k;
+		thedata = "result[0]." + mydata;
+		thedata = eval(thedata);
+%>
+<td title="P.GDEP - Prime Grand déplacement (exclus fonction intervention)"><input style="margin-left : 10px;" type="checkbox"  name="pgdep<%= k %>" value="1"  <% if (thedata > 0) { %> checked <% } %> /></td>
+<%
+mydata = 'pdp' + k;
+		thedata = "result[0]." + mydata;
+		thedata = eval(thedata);
+%>
+<td title="P.D.P. - Prime Départ Précipité < 24 heures (exclus fonction intervention)"><input style="margin-left : 10px;" type="checkbox"  name="pdp<%= k %>" value="1"  <% if (thedata > 0) { %> checked <% } %> /></td>
+<%
+mydata = 'kms' + k;
+		thedata = "result[0]." + mydata;
+		thedata = eval(thedata);
+%>
+<td><input style="margin-left : 10px;" type="text" class="text-input-tiny"  name="kms<%= k %>"   <% if (thedata > 0) { %>value="<%= thedata %>" <% } %>/></td>
+<%
+mydata = 'nrdp' + k;
+		thedata = "result[0]." + mydata;
+		thedata = eval(thedata);
+%>
+<td title="Prime de non respect du délai de prévenance : (exclus fonction intervention)"><input style="margin-left : 10px;" type="checkbox"  name="nrdp<%= k %>" value="1"  <% if (thedata > 0) { %> checked <% } %> /></td>
+<%
+mydata = 'astnuit' + k;
+		thedata = "result[0]." + mydata;
+		thedata = eval(thedata);
+%>
+<td><input style="margin-left : 10px;" type="checkbox"  name="astnuit<%= k %>" value="1"  <% if (thedata > 0) { %> checked <% } %> /></td>
+<%
+mydata = 'astwe' + k;
+		thedata = "result[0]." + mydata;
+		thedata = eval(thedata);
+%>
+<td><input style="margin-left : 10px;" type="checkbox"  name="astwe<%= k %>" value="1"  <% if (thedata > 0) { %> checked <% } %> /></td>
+<%
+mydata = 'astfe' + k;
+		thedata = "result[0]." + mydata;
+		thedata = eval(thedata);
+%>
+<td><input style="margin-left : 10px;" type="checkbox"  name="astfe<%= k %>" value="1"  <% if (thedata > 0) { %> checked <% } %> /></td>
+</tr>
+<% } %>
+<tr>
+<th>Observations:</th><td colspan="<%= cspi %>"><textarea name="comments"><%= result[0].comments %></textarea></td>
+</tr>
+</tbody>
+<tfoot><tr>
+<td colspan="<%= cspfi %>" style="background-color : rgb(229,229,229);">
+<input type="hidden"  name="phcControl" value="<%= result[0].phcControl %>" />
+<input type="hidden" name="hiddenphcId" value="<%= result[0].id %>" />
+<input type="hidden" id="uphiddenphcaction" name="hiddenphcaction" />
+<% if (result[0].phcControl == 0) { %>
+<input type="button" value="Envoyer" style="float : left; margin-right : 10px" id="upsendphcButton" /> <% } %>
+<input type="button" value="Enregistrer" style="float : left; margin-right : 10px" id="upsavephcButton" />
+</td>
+<td style="background-color : rgb(229,229,229);" align="center"><img src="../images/css/add.png" style="cursor : pointer" id="upaddColumn" title="Ajouter une colonne" /></td>
+</tr></tfoot>
+</table>
+</form>
+</div></div>
+
+
+<script type="text/javascript">
+
+function addZero(i) {
+    if (i < 10) {
+        i = "0" + i;
+    }
+    return i;
+}
+
+$(document).ready(function() {
+
+function formatInputs() {
+$('.text-input').myCustomInput({width : 200});
+$('.text-input-little').myCustomInput({width : 70});
+$('.text-input-tiny').myCustomInput({width : 40,margin : 0});
+$('.text-input-title').myCustomInput({width : 300});
+$('textarea').myCustomInput({width : 630, height : 84});
+$('input[type=button]').myCustomButton({height : "21px"});
+$("#connectWindow").dialog({autoOpen: false});
+$("#changelogwindow").dialog({autoOpen: false});
+$('#changelogin').css('cursor' , 'pointer');$('img[alt=cameraImg]').css('cursor' , 'pointer');
+$('a').css({'text-decoration' : 'none','color' : 'rgb(175,0,124)'});
+$( ".datepicker" ).datepicker($.datepicker.regional[ "fr" ]);
+$( ".datepicker" ).myCustomInput({width : 70,margin : 0});
+
+}
+/*
+$('td[alt=customer]').on('change',function(){
+	
+	thisValue = $(this).children('input').val(); 
+	thisIndex = $(this).index();
+	// thisIndex++;
+	for (i = thisIndex ; i < 6 ; i++) {
+	$("#upphcTable").find('td[alt=customer]').eq(i).children('input').val(thisValue);
+	}
+	}) ;
+
+$('td[alt=project]').on('change',function(){
+	
+	thisValue = $(this).children('input').val(); 
+	thisIndex = $(this).index();
+	// thisIndex++;
+	for (i = thisIndex ; i < 6 ; i++) {
+	$("#upphcTable").find('td[alt=project]').eq(i).children('input').val(thisValue);
+		}
+	}) ;
+*/
+$('th[alt=datepicker]').on('change',function(){
+	thisIndex = $(this).parent().index();
+	thisDate = $(this).children('input:first').datepicker( "getDate" );
+	thisIndex++;
+	for (i = thisIndex ; i < 10 ; i++) {
+	thisDate.setDate(thisDate.getDate()+1);
+	thisDate = new Date(thisDate);
+	$("#upphcTable").find("tr").eq(i).children().children().datepicker( "setDate" ,thisDate);
+	}
+	}) ;
+
+	$('#upphcTable').on('click','#upsavephcButton',function() {
+	$('#uphiddenphcaction').val('save');
+	$('#upsavephc').submit()});
+	
+	$('#upphcTable').on('click','#upsendphcButton',function() {
+	$('#uphiddenphcaction').val('send');
+	$('#upsavephc').submit()});
+	
+	  $('#updatephcWindow').dialog({autoOpen : true , maxWidth : 3000, maxHeight : 1200, width : 1400 , height : 800});
+	$('#updatephcWindow').dialog({close : function() {$(this).remove() } });
+
+$('#upaddColumn').on('click',function() {
+
+// colspan
+
+var csp = $("#upphcTable").find('tfoot td:first').prop('colspan');
+csptd = $("#upphcTable").find('tbody td:last').prop('colspan');
+csp++;
+csptd++;
+
+// largeur de la fenetre
+/*
+var tabsWidth = $('#tabs').css('width');
+tabsWidth = parseInt(tabsWidth) + parseInt(100);
+$('#tabs').css('width',tabsWidth);
+var tabWidth = $('#tabs-1').css('width');
+tabWidth = parseInt(tabWidth) + parseInt(100);
+$('#tabs-1').css('width',tabWidth + "px");
+*/
+// dernier index de colonne pour i
+
+lastIndex = $("#upsavephc").find('td[alt=customer]:last').index();
+i = parseInt(lastIndex) + parseInt(1);
+
+// ajout de colonne
+
+newcol = '<td alt="customer"><input type="text" class="text-input-little" name="cli'+i+'" /></td>';
+$("#upsavephc").find('td[alt=customer]:last').after(newcol);
+newcol = '<td alt="project"><input type="text" class="text-input-little" name="aff'+i+'" /></td>';
+$("#upsavephc").find('td[alt=project]:last').after(newcol);
+newcol = '<th alt="pjour">% / Jour</th>';
+$("#upsavephc").find('th[alt=pjour]:last').after(newcol);
+
+for (k = 1; k < 8 ; k++) {
+newcol = '<td alt="htv'+k+'">' + 
+'<span style="text-align : center; color : #AF007C">Travail</span><input class="text-input-little"  name="ht'+i+k+'" />' + 
+'<span style="text-align : center; color : #AF007C">Voyage</span><input class="text-input-little"  name="hv'+i+k+'" /></td>';
+$("#upsavephc").find('td[alt="htv'+k+'"]:last').after(newcol);
+}
+
+// colspan
+
+$("#upsavephc").find('tfoot td:first').prop('colspan',csp);
+$("#upsavephc").find('tbody td:last').prop('colspan',csptd);
+formatInputs();
+
+socket.emit('newcolumn',i);
+
+});		
+/*################################################################################################################################################
+###################################     Fin $(document).ready                       ###########################################################
+################################################################################################################################################*/
+    
+});
+</script>
