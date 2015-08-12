@@ -1,0 +1,47 @@
+<%
+
+if (mycookie != undefined) {
+function setMajToAllWords(toFirstWord, texte){
+		var newText = (toFirstWord == true) ? texte.charAt(0).toUpperCase() : texte.charAt(0);
+		for (var i=0 ; i<texte.length-1 ; i++){
+			if (texte.charAt(i).match(/\s/) && texte.charAt(i+1).match(/[a-z]/)){
+				newText += texte.charAt(i+1).toUpperCase();
+			} else {
+				newText += texte.charAt(i+1);
+			}
+		}
+		return newText;
+}
+
+function getName(c) {
+
+cLenght = c.lastIndexOf("-");
+cName = c.substring(c.indexOf("-",0)+1,cLenght);
+cName = cName.toLowerCase();
+cName = setMajToAllWords(true,cName);
+return cName;
+}
+
+
+function getMat(c) {
+cMat = c.substring(0,c.indexOf("-",0));
+return cMat;
+}
+
+cookieName = getName(mycookie);
+
+cookieMat = getMat(mycookie);
+
+  %>
+<div id="sessioncontrol"  class="textSession">Session ouverte : <%- cookieName %> 
+<div id="changelogin" style="color:rgb(175,0,124);padding-top : 5px;">Changer d'identifiants</div>
+</div><div  style="float:right;margin-top : 10px;">
+<a href="/clearSession/"><input type="button" value="Fermer la session" id="deconnectbutton" /></a>
+</div>
+
+<% } 
+
+  else {  %>
+
+<div  style="float:right; margin-top : 10px;"><input type="button" value="Ouvrir une session" id="connectbutton" /></div>
+<% } %>
