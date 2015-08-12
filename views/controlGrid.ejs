@@ -1,0 +1,137 @@
+<% 
+
+control_array = ["479","572","547","450","556","473"];
+var cookieMat = "";
+if (mycookie != undefined) {cookieMat = getMat(mycookie);}
+
+Date.prototype.getWeek = function() {
+var onejan = new Date(this.getFullYear(),0,1);
+return Math.ceil((((this - onejan) / 86400000) + onejan.getDay()+1)/7);
+} 
+
+function setMajToAllWords(toFirstWord, texte){
+		var newText = (toFirstWord == true) ? texte.charAt(0).toUpperCase() : texte.charAt(0);
+		for (var i=0 ; i<texte.length-1 ; i++){
+			if (texte.charAt(i).match(/\s/) && texte.charAt(i+1).match(/[a-z]/)){
+				newText += texte.charAt(i+1).toUpperCase();
+			} else {
+				newText += texte.charAt(i+1);
+			}
+		}
+		return newText;
+}
+
+function getName(c) {
+
+cLenght = c.lastIndexOf("-");
+cName = c.substring(c.indexOf("-",0)+1,cLenght);
+cName = cName.toLowerCase();
+cName = setMajToAllWords(true,cName);
+return cName;
+}
+
+
+function getMat(c) {
+cMat = c.substring(0,c.indexOf("-",0));
+return cMat;
+}
+
+function getChefMat(c)
+{
+cStart = c.lastIndexOf("-") + 1;
+cLenght = c.lenght;
+cMat =  c.substring(cStart,cLenght);
+return cMat;
+}
+%>
+<div style="overflow : hidden">
+<table class="borderedTable" id="phcControlTable">
+<thead>
+
+<tr>
+<th>Année</th>
+<th>Mois</th>
+<th>Semaine</th>
+<th>Nom</th>
+<th>Impression</th>
+<th>Modification</th>
+<th>Validation</th>
+</tr>
+</thead>
+<tbody>
+<% result2.forEach(function(row){ 
+
+
+posterName = getName(row.phcName);
+posterMat = getMat(row.phcName);
+chefMat = getChefMat(row.phcName);
+
+
+		pleinMonth = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
+		var thisYear;
+		var thismonth;
+		var thisweek;
+	
+if (row.dat1 !== "0000-00-00") {thisYear = row.dat1.getFullYear();thismonth = pleinMonth[row.dat1.getMonth()];thisweek = row.dat1.getWeek();}
+else if (row.dat2 !== "0000-00-00") {thisYear = row.dat2.getFullYear();thismonth = pleinMonth[row.dat2.getMonth()];thisweek = row.dat2.getWeek();}
+else if (row.dat3 !== "0000-00-00") {thisYear = row.dat3.getFullYear();thismonth = pleinMonth[row.dat3.getMonth()];thisweek = row.dat3.getWeek();}
+else if (row.dat4 !== "0000-00-00") {thisYear = row.dat4.getFullYear();thismonth = pleinMonth[row.dat4.getMonth()];thisweek = row.dat4.getWeek();}
+else if (row.dat5 !== "0000-00-00") {thisYear = row.dat5.getFullYear();thismonth = pleinMonth[row.dat5.getMonth()];thisweek = row.dat5.getWeek();}
+else if (row.dat6 !== "0000-00-00") {thisYear = row.dat6.getFullYear();thismonth = pleinMonth[row.dat6.getMonth()];thisweek = row.dat6.getWeek();}
+else if (row.dat7 !== "0000-00-00") {thisYear = row.dat7.getFullYear();thismonth = pleinMonth[row.dat7.getMonth()];thisweek = row.dat7.getWeek();}
+else  {thisYear = row.phcDate.getFullYear();thismonth = pleinMonth[row.phcDate.getMonth()];thisweek = row.phcDate.getWeek();}
+
+if (control_array.indexOf(cookieMat) !== -1) {
+%>
+
+<tr>
+<td align="center"><%= thisYear %></td>
+<td align="center"><%= thismonth %></td>
+<td align="center"><%= thisweek %></td>
+<td><%= posterName %></td>
+<td align="center"><a href="/print/<%= row.id %>/control/"><img src="../images/css/print.png" style="cursor : pointer;  height : 20px" /></a></td>
+<td align="center"><input type="hidden" value="<%= row.id %>" /><img src="../images/css/mod.png" style="cursor : pointer;  height : 20px" class="modphc" /><input type="hidden" value="control" /></td>
+<td align="center"><input  type="checkbox" class="vcs" name="vcs" <% if (row.vcs == 1) { %> checked <% } %> value="<%= row.vcs %>" disabled=disabled  /></td>
+</tr>
+
+
+<% 
+}
+else if (chefMat == cookieMat) {
+%>
+
+<tr>
+<td align="center"><%= thisYear %></td>
+<td align="center"><%= thismonth %></td>
+<td align="center"><%= thisweek %></td>
+<td><%= posterName %></td>
+<td align="center"><a href="/print/<%= row.id %>/control/"><img src="../images/css/print.png" style="cursor : pointer;  height : 20px" /></a></td>
+<td align="center"><input type="hidden" value="<%= row.id %>" /><img src="../images/css/mod.png" style="cursor : pointer;  height : 20px" class="modphc"/><input type="hidden" value="control" /></td>
+<td align="center"><input type="hidden" value="<%= row.id %>" /><input id="<%= row.id %>" type="checkbox" class="vcs" name="vcs" <% if (row.vcs == 1) { %> checked <% } %> value="<%= row.vcs %>" /></td>
+</tr>
+
+
+<% 
+}
+}); %>
+</tbody>
+</table>
+</div> 
+<script type="text/javascript">
+$(function() {
+if( $.cookie('infobuCookie') !== undefined) { 
+$('#vcsHiddenCookie').val($.cookie('infobuCookie'));
+}
+$('.vcs').on('change',function() {
+thisId = $(this).prev('input[type=hidden]').val();
+vcsHiddenCookie = $('#vcsHiddenCookie').val();
+socket.emit('vcs',{"thisId" : thisId , "vcsHiddenCookie" : vcsHiddenCookie});
+
+});
+
+socket.on('vcsReturn', function(vcsReturn) {
+$("#tabs-2").html(vcsReturn);
+
+});
+});
+</script>
